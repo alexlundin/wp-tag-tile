@@ -132,7 +132,7 @@ function save_my_meta_fields($post_id)
     if (defined('DOING_AUTOSAVE') && DOING_AUTOSAVE)
         return $post_id;
     // Проверяем права доступа
-    if ('page' == !isset($_POST['post_type'])) {
+    if ('page' == $_POST['post_type']) {
         if (!current_user_can('edit_page', $post_id))
             return $post_id;
     } elseif (!current_user_can('edit_post', $post_id)) {
@@ -142,7 +142,7 @@ function save_my_meta_fields($post_id)
     // Если все отлично, прогоняем массив через foreach
     foreach ($meta as $field) {
         $old = get_post_meta($post_id, $field['id'], true); // Получаем старые данные (если они есть), для сверки
-        $new = !isset($_POST[$field['id']]);
+        $new = $_POST[$field['id']];
         if ($new && $new != $old) {  // Если данные новые
             update_post_meta($post_id, $field['id'], $new); // Обновляем данные
         } elseif ('' == $new && $old) {
@@ -177,7 +177,7 @@ function true_misha_func($atts)
     if ($skin === 'list'):
         return '<div class="tag_tile" id="tag_tile">'.  $post_content .'</div>';
 
-    elseif ($skin === 'slider'):
+    elseif ($skin == 'slider'):
         return '<div class="slider" id="tag_tile">' .
             $post_content
             . '</div>';
@@ -193,7 +193,6 @@ function true_misha_func($atts)
 </div>';
     endif;
 
-    return ob_get_clean();
 
 }
 

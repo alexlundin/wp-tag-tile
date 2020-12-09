@@ -1,6 +1,6 @@
 (function() {
     const postsValuesTiles = [];
-    jQuery.each(postsValues_tiles_button, function(key, value) {
+    jQuery.each(values_tiles_button, function(key, value) {
         postsValuesTiles.push({text:value, value:key});
     });
     tinymce.create("tinymce.plugins.true_mce_button", {

@@ -18,7 +18,7 @@ add_action('init', 'register_tag_tile');
 
 function register_tag_tile()
 {
-    register_post_type('tag-tile', array(
+    register_post_type('tag', array(
         'label' => __('Tag Tiles', 'wp-seo-tag-tile'),
         'public' => false,
         'publicly_queryable' => false,
@@ -60,7 +60,7 @@ function tiles_meta_box()
         'tiles_meta_box', // Идентификатор(id)
         'Варианты отображения', // Заголовок области с мета-полями(title)
         'show_tiles_metabox', // Вызов(callback)
-        'tag-tile', // Где будет отображаться наше поле, в нашем случае в Записях
+        'tag', // Где будет отображаться наше поле, в нашем случае в Записях
         'side');
 }
 
@@ -126,7 +126,7 @@ function save_my_meta_fields($post_id)
     global $meta;  // Массив с нашими полями
 
     // проверяем наш проверочный код
-    if ( isset($_POST['at_nonce']) && !wp_verify_nonce($_POST['at_nonce'], __FILE__) )
+    if (isset($_POST['at_nonce']) && !wp_verify_nonce($_POST['at_nonce'], __FILE__))
         return $post_id;
     // Проверяем авто-сохранение
     if (defined('DOING_AUTOSAVE') && DOING_AUTOSAVE)
@@ -157,7 +157,7 @@ add_filter('user_can_richedit', 'disable_for_cpt');
 function disable_for_cpt($default)
 {
     global $post;
-    if (get_post_type($post) == 'tag-tile')
+    if (get_post_type($post) == 'tag')
         return false;
     return $default;
 }
@@ -174,7 +174,24 @@ function true_misha_func($atts)
 
 
     ob_start();
-    require_once sprintf("templates/%s.php", $skin);
+    if ($skin === 'list'):
+        return '<div class="tag_tile" id="tag_tile">'.  $post_content .'</div>';
+
+    elseif ($skin === 'slider'):
+        return '<div class="slider" id="tag_tile">' .
+            $post_content
+            . '</div>';
+    else:
+        return '<div class="tag_tile_wrap">
+    <div class="tag_tile tag_tile_drop" id="tag_tile">' . $post_content . '</div>
+    <span class="more_tags">
+      <svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" focusable="false" data-prefix="fas"
+           data-icon="angle-down" class="svg-inline--fa fa-angle-down fa-w-10" role="img" viewBox="0 0 320 512"><path
+              fill="currentColor"
+              d="M143 352.3L7 216.3c-9.4-9.4-9.4-24.6 0-33.9l22.6-22.6c9.4-9.4 24.6-9.4 33.9 0l96.4 96.4 96.4-96.4c9.4-9.4 24.6-9.4 33.9 0l22.6 22.6c9.4 9.4 9.4 24.6 0 33.9l-136 136c-9.2 9.4-24.4 9.4-33.8 0z"/></svg>
+    </span>
+</div>';
+    endif;
 
     return ob_get_clean();
 
@@ -226,7 +243,7 @@ function true_register_mce_button($buttons)
 add_action('admin_footer', 'round_plag_get_tiles');
 function round_plag_get_tiles()
 {
-    $arguments = array('post_type' => 'tag-tile', 'post_status' => 'publish', 'posts_per_page' => -1,);
+    $arguments = array('post_type' => 'tag', 'post_status' => 'publish', 'posts_per_page' => -1,);
     $list_tag = get_posts($arguments);
 
     echo '<script>var postsValues_tiles_button = {};';

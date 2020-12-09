@@ -11,6 +11,8 @@ if (jQuery(".tag_tile_drop").length) {
 
 jQuery('.slider').slick({
     infinite: true,
+    autoplay: true,
+    adaptiveHeight: true,
     slidesToShow: 3,
     slidesToScroll: 1,
 });

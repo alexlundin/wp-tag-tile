@@ -245,12 +245,12 @@ function round_plag_get_tiles()
     $arguments = array('post_type' => 'tag', 'post_status' => 'publish', 'posts_per_page' => -1,);
     $list_tag = get_posts($arguments);
 
-    echo '<script>var postsValues_tiles_button = {};';
+    echo '<script>var values_tiles_button = {};';
     $c = 0;
     foreach ($list_tag as $list_item) {
         $item_id = $list_item->ID;
         $item_title = get_the_title($list_item->ID);
-        echo "postsValues_tiles_button[{$item_id}] = '{$item_title}';";
+        echo "values_tiles_button[{$item_id}] = '{$item_title}';";
         $c++;
     }
     echo '</script>';

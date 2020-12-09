@@ -153,10 +153,11 @@ function save_my_meta_fields($post_id)
 
 add_action('save_post', 'save_my_meta_fields'); // Запускаем функцию сохранения
 
-add_filter( 'user_can_richedit', 'disable_for_cpt' );
-function disable_for_cpt( $default ) {
+add_filter('user_can_richedit', 'disable_for_cpt');
+function disable_for_cpt($default)
+{
     global $post;
-    if ( get_post_type( $post ) == 'tag-tile' )
+    if (get_post_type($post) == 'tag-tile')
         return false;
     return $default;
 }
@@ -173,9 +174,7 @@ function true_misha_func($atts)
 
 
     ob_start();
-    require_once <<<TAG
-    templates/$skin.php
-    TAG;
+    require_once sprintf("templates/%s.php", $skin);
 
     return ob_get_clean();
 
@@ -189,45 +188,50 @@ add_action('wp_enqueue_scripts', function () {
     wp_enqueue_style('tag_tile_list_frontend', plugin_dir_url(__FILE__) . 'assets/css/tag_tile_list_frontend.css');
     wp_enqueue_script("jquery");
     wp_enqueue_script('tile-slick', plugin_dir_url(__FILE__) . 'assets/slick/slick.min.js', ('jquery'), null, true);
-    wp_enqueue_script('tile-script', plugin_dir_url(__FILE__) . 'assets/js/tag_tile_frontend.js', null, null, true);wp_enqueue_style('tag_tile_list_frontend', plugin_dir_url(__FILE__) . 'assets/css/tag_tile_list_frontend.css');
+    wp_enqueue_script('tile-script', plugin_dir_url(__FILE__) . 'assets/js/tag_tile_frontend.js', null, null, true);
+    wp_enqueue_style('tag_tile_list_frontend', plugin_dir_url(__FILE__) . 'assets/css/tag_tile_list_frontend.css');
 });
 
 
-
 // Хуки
-function true_add_mce_button() {
+function true_add_mce_button()
+{
     // проверяем права пользователя - может ли он редактировать посты и страницы
-    if ( !current_user_can( 'edit_posts' ) && !current_user_can( 'edit_pages' ) ) {
+    if (!current_user_can('edit_posts') && !current_user_can('edit_pages')) {
         return; // если не может, то и кнопка ему не понадобится, в этом случае выходим из функции
     }
     // проверяем, включен ли визуальный редактор у пользователя в настройках (если нет, то и кнопку подключать незачем)
-    if ( 'true' == get_user_option( 'rich_editing' ) ) {
-        add_filter( 'mce_external_plugins', 'true_add_tinymce_script' );
-        add_filter( 'mce_buttons', 'true_register_mce_button' );
+    if ('true' == get_user_option('rich_editing')) {
+        add_filter('mce_external_plugins', 'true_add_tinymce_script');
+        add_filter('mce_buttons', 'true_register_mce_button');
     }
 }
+
 add_action('admin_head', 'true_add_mce_button');
 
 // В этом функции указываем ссылку на JavaScript-файл кнопки
-function true_add_tinymce_script( $plugin_array ) {
+function true_add_tinymce_script($plugin_array)
+{
     $plugin_array['true_mce_button'] = plugin_dir_url(__FILE__) . 'assets/js/tag_tile_btn.js'; // true_mce_button - идентификатор кнопки
     return $plugin_array;
 }
 
 // Регистрируем кнопку в редакторе
-function true_register_mce_button( $buttons ) {
-    array_push( $buttons, 'true_mce_button' ); // true_mce_button - идентификатор кнопки
+function true_register_mce_button($buttons)
+{
+    array_push($buttons, 'true_mce_button'); // true_mce_button - идентификатор кнопки
     return $buttons;
 }
 
 add_action('admin_footer', 'round_plag_get_rounds');
-function round_plag_get_rounds(){
-    $args = array( 'post_type'=> 'tag-tile','post_status'=> 'publish','posts_per_page' =>-1,);
-    $list_tags = get_posts( $args );
+function round_plag_get_rounds()
+{
+    $args = array('post_type' => 'tag-tile', 'post_status' => 'publish', 'posts_per_page' => -1,);
+    $list_tags = get_posts($args);
 
     echo '<script>var postsValues_round_button = {};';
     $count = 0;
-    foreach($list_tags as $p){
+    foreach ($list_tags as $p) {
         $p_id = $p->ID;
         $p_title = get_the_title($p->ID);
         echo "postsValues_round_button[{$p_id}] = '{$p_title}';";

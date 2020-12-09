@@ -126,13 +126,13 @@ function save_my_meta_fields($post_id)
     global $meta;  // Массив с нашими полями
 
     // проверяем наш проверочный код
-    if (!wp_verify_nonce($_POST['custom_meta_box_nonce'], basename(__FILE__)))
+    if ( isset($_POST['at_nonce']) && !wp_verify_nonce($_POST['at_nonce'], __FILE__) )
         return $post_id;
     // Проверяем авто-сохранение
     if (defined('DOING_AUTOSAVE') && DOING_AUTOSAVE)
         return $post_id;
     // Проверяем права доступа
-    if ('page' == $_POST['post_type']) {
+    if ('page' == !isset($_POST['post_type'])) {
         if (!current_user_can('edit_page', $post_id))
             return $post_id;
     } elseif (!current_user_can('edit_post', $post_id)) {
@@ -142,7 +142,7 @@ function save_my_meta_fields($post_id)
     // Если все отлично, прогоняем массив через foreach
     foreach ($meta as $field) {
         $old = get_post_meta($post_id, $field['id'], true); // Получаем старые данные (если они есть), для сверки
-        $new = $_POST[$field['id']];
+        $new = !isset($_POST[$field['id']]);
         if ($new && $new != $old) {  // Если данные новые
             update_post_meta($post_id, $field['id'], $new); // Обновляем данные
         } elseif ('' == $new && $old) {

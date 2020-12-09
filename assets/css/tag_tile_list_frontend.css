@@ -60,6 +60,7 @@
 .slick-prev:before, .slick-next:before {
     color: #333333;
     transition: 0.3s ease;
+    line-height: 0;
 }
 
 .slick-prev:before:hover, .slick-next:before:hover {
@@ -74,4 +75,16 @@
     text-decoration: none;
     pointer-events: none;
     cursor: default;
+    padding: 10px 30px;
+    margin-bottom: 15px !important;
+    margin-right: 15px;
+    border: 1px solid #a3a3a3;
+    border-radius: 10px;
+    -webkit-transition: all .3s ease;
+    -o-transition: all .3s ease;
+    transition: all .3s ease;
+}
+
+.tag_tile_wrap {
+    margin: 15px auto;
 }

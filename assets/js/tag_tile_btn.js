@@ -1,14 +1,14 @@
 (function() {
-    const postsValuesRound = [];
-    jQuery.each(postsValues_round_button, function(key, value) {
-        postsValuesRound.push({text:value, value:key});
+    const postsValuesTiles = [];
+    jQuery.each(postsValues_tiles_button, function(key, value) {
+        postsValuesTiles.push({text:value, value:key});
     });
     tinymce.create("tinymce.plugins.true_mce_button", {
         init : function(ed) {
             ed.addButton("true_mce_button", {
                 type: 'listbox',
                 text: 'Метки тегов',
-                values: postsValuesRound,
+                values: postsValuesTiles,
                 onselect: function() {
                     let v = this.value();
                     let return_text = '[tiles id=' + v + ']';

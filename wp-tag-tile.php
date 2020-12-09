@@ -223,18 +223,18 @@ function true_register_mce_button($buttons)
     return $buttons;
 }
 
-add_action('admin_footer', 'round_plag_get_rounds');
-function round_plag_get_rounds()
+add_action('admin_footer', 'round_plag_get_tiles');
+function round_plag_get_tiles()
 {
     $args = array('post_type' => 'tag-tile', 'post_status' => 'publish', 'posts_per_page' => -1,);
     $list_tags = get_posts($args);
 
-    echo '<script>var postsValues_round_button = {};';
+    echo '<script>var postsValues_tiles_button = {};';
     $count = 0;
     foreach ($list_tags as $p) {
         $p_id = $p->ID;
         $p_title = get_the_title($p->ID);
-        echo "postsValues_round_button[{$p_id}] = '{$p_title}';";
+        echo "postsValues_tiles_button[{$p_id}] = '{$p_title}';";
         $count++;
     }
     echo '</script>';

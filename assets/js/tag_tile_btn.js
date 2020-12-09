@@ -10,9 +10,9 @@
                 text: 'Метки тегов',
                 values: postsValuesTiles,
                 onselect: function() {
-                    let v = this.value();
-                    let return_text = '[tiles id=' + v + ']';
-                    ed.execCommand("mceInsertContent", 0, return_text);
+                    let value = this.value();
+                    let return_t = '[tiles id=' + value + ']';
+                    ed.execCommand("mceInsertContent", 0, return_t);
                 }
             });
         },
